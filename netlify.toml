@@ -1,0 +1,31 @@
+# ============================================================================
+#  Ai Gift Pro — Netlify deployment
+#
+#  Deploy from Git (GitHub/GitLab/Bitbucket), NOT by dragging the zip.
+#  Netlify runs the build below and serves the compiled dist/ folder.
+#
+#  Required env vars — Site settings → Environment variables:
+#    GEMINI_API_KEY              your Google AI Studio key (server-side only)
+#    VITE_AMAZON_AFFILIATE_TAG   gifts0b9-20
+#    GEMINI_MODEL                optional (default gemini-2.5-flash, free tier)
+# ============================================================================
+
+[build]
+  command  = "npm run build:web"
+  publish  = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Functions register their own routes in code (export const config = { path }).
+# We do NOT add an /api/* redirect here — that would shadow them.
+
+# SPA fallback: serve index.html for any path the static build doesn't have.
+# force=false means real files (assets, /api/* functions) are served first;
+# only genuine misses fall through to the app shell.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+  force  = false
