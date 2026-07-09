@@ -108,10 +108,23 @@ function sanitize(raw: any): GiftRecommendationResponse {
 }
 
 export async function generateRecommendations(info: RecipientInfo): Promise<GiftRecommendationResponse> {
-  const apiKey = process.env.GEMINI_API_KEY || "";
+  // Read the key across runtimes. On Netlify, prefer the value the user set.
+  // (Netlify's AI Gateway can inject its own Gemini vars; we deliberately use
+  // the user's GEMINI_API_KEY and talk to Google directly.)
+  const g: any = (globalThis as any).Netlify?.env;
+  const apiKey =
+    (g?.get?.("GEMINI_API_KEY")) ||
+    process.env.GEMINI_API_KEY ||
+    process.env.GOOGLE_API_KEY ||
+    "";
   if (!apiKey) throw new Error("MISSING_KEY");
 
-  const ai = new GoogleGenAI({ apiKey });
+  // Pin transport to Google's public endpoint so no injected base URL/gateway
+  // intercepts the request. This is what makes the free-tier key work on Netlify.
+  const ai = new GoogleGenAI({
+    apiKey,
+    httpOptions: { baseUrl: "https://generativelanguage.googleapis.com" },
+  } as any);
   const prompt = buildPrompt(info);
 
   // Grounded pass: Google Search is what lets the model find real ASINs.
@@ -153,5 +166,8 @@ export function friendlyError(err: unknown): { status: number; message: string }
     return { status: 500, message: "The gift engine couldn't authenticate. Check the server's GEMINI_API_KEY." };
   if (code === "RATE_LIMIT")
     return { status: 429, message: "We've hit today's free-tier limit. Try again in a little while." };
-  return { status: 502, message: "We couldn't put a list together just now. Give it another try." };
+  // Surface the underlying reason (trimmed) so problems are diagnosable in the UI
+  // and logs, rather than a blanket "not reachable".
+  const detail = code.replace(/\s+/g, " ").slice(0, 300);
+  return { status: 502, message: `The gift engine returned an error: ${detail}` };
 }
