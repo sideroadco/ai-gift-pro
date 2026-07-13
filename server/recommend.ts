@@ -40,11 +40,12 @@ STRICT RULES
    Never invent a product, a brand, or a model number.
 2. BE SPECIFIC. "Ember Mug 2" or "Leuchtturm1917 A5" — not "a nice mug".
    Skip the obvious mug-and-socks defaults unless the brand makes it interesting.
-3. ASIN HANDLING (this is the part people get wrong):
-   - Use the Google Search tool to find the real 10-character Amazon.com ASIN.
-   - Only return an ASIN you actually saw in a search result for THIS product.
-   - If you did not see it, return exactly "SEARCH". Never guess.
-   - A wrong ASIN sends the buyer to a 404. Three correct links beat ten broken ones.
+3. LINKING. Do NOT provide Amazon product codes (ASINs) — we never use them,
+   because a guessed code sends the buyer to a dead page. Instead, give a
+   "searchQuery" that is precise enough that the product is the top result on
+   Amazon: include the brand and the model/edition, and nothing else.
+   Good: "Fellow Stagg EKG electric kettle"
+   Bad:  "nice kettle for coffee lovers"
 4. PRICE. priceRange is your best estimate (e.g. "$40 - $60"). It is shown to the
    user as an estimate, not as a live Amazon price.
 
@@ -59,8 +60,7 @@ Shape:
       "description": "string, 1-2 sentences, concrete",
       "priceRange": "string",
       "whyItsPerfect": "string, one sentence tied to THIS person",
-      "searchQuery": "broad Amazon search term that returns results",
-      "asin": "10-character ASIN, or SEARCH",
+      "searchQuery": "precise Amazon search: brand + model, so the product is the top hit",
       "category": "short label, e.g. For the reader"
     }
   ]
@@ -80,25 +80,26 @@ function extractJson(text: string): any {
   }
 }
 
-const ASIN_RE = /^[A-Z0-9]{10}$/;
-const BAD_ASIN = /(AAAAA|BBBBB|12345|00000|B000000000|0123456789)/;
-
-/** Never let a hallucinated ASIN through — a bad one is a 404 and a lost sale. */
+/**
+ * We do NOT use model-supplied ASINs. A hallucinated code looks perfectly valid
+ * (10 chars, right alphabet) but lands on "Sorry, we couldn't find that page" —
+ * a dead link loses the sale and the trust. Every link is therefore an Amazon
+ * SEARCH link, which always resolves and still carries the affiliate tag, so
+ * tracking and commissions are unaffected.
+ */
 function sanitize(raw: any): GiftRecommendationResponse {
   const list: GiftOption[] = Array.isArray(raw?.recommendations) ? raw.recommendations : [];
   const recommendations = list
     .filter((g) => g && typeof g.name === "string" && g.name.trim().length > 1)
     .map((g) => {
-      const asin = String(g.asin ?? "").trim().toUpperCase();
-      const valid = ASIN_RE.test(asin) && !BAD_ASIN.test(asin);
       return {
         name: String(g.name).trim(),
         description: String(g.description ?? "").trim(),
         priceRange: String(g.priceRange ?? "").trim(),
         whyItsPerfect: String(g.whyItsPerfect ?? "").trim(),
         searchQuery: String(g.searchQuery ?? g.name).trim(),
-        // fall back to a search link, which always resolves to a real page
-        asin: valid ? asin : "SEARCH",
+        // Always a search link. Never a model-supplied product code.
+        asin: "SEARCH",
         category: String(g.category ?? "Gift idea").trim(),
       } as GiftOption;
     });
@@ -148,7 +149,7 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
     // link because no ASIN was verified. Better than a dead end.
     const res = await ai.models.generateContent({
       model: MODEL,
-      contents: prompt + "\n\nYou have no search tool. Set every \"asin\" to \"SEARCH\".",
+      contents: prompt,
       config: { responseMimeType: "application/json" },
     });
     const text = res.text;
