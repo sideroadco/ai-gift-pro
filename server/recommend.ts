@@ -12,13 +12,18 @@ import { GoogleGenAI } from "@google/genai";
 import type { RecipientInfo, GiftOption, GiftRecommendationResponse } from "../src/types";
 
 /**
- * Default model is a FREE-TIER model, so the app costs nothing to run on a
- * Google AI Studio key (leave billing disabled on the project).
- *   Free tier : gemini-2.5-flash (default), gemini-3.1-flash-lite
- *   Paid only : gemini-3.1-pro-preview
- * Override with the GEMINI_MODEL environment variable.
+ * Model selection.
+ *
+ * Google retires specific model versions without much notice (gemini-2.5-flash-lite
+ * was pulled for new users, which broke this app with a 404). So we default to the
+ * moving alias `gemini-flash-latest`, which Google keeps pointed at the current
+ * Flash model — fast, on the free tier, and it can't go stale.
+ *
+ * If the alias ever fails we fall back through known-good Flash names in order.
+ * Override any of this with the GEMINI_MODEL environment variable.
  */
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+const MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
+const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest"];
 
 function buildPrompt(info: RecipientInfo): string {
   const today = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -141,27 +146,45 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
   // timeout (10s on the free plan) kills the request before it returns — that was
   // the HTTP 504. We don't need grounding any more: every link is an Amazon
   // search link, so the model never has to look up a product code.
-  try {
-    const res = await withTimeout(
-      ai.models.generateContent({
-        model: MODEL,
-        contents: prompt,
-        config: { responseMimeType: "application/json" },
-      }),
-      8500, // finish before Netlify's 10s function limit, so we can return a real message
-    );
-    const text = res.text;
-    if (!text) throw new Error("Empty response from model");
-    return sanitize(extractJson(text));
-  } catch (err: any) {
-    const msg = String(err?.message ?? err);
-    if (msg === "SLOW") throw new Error("SLOW");
-    if (/API key|API_KEY|PERMISSION_DENIED|invalid/i.test(msg)) throw new Error("BAD_KEY");
-    if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) throw new Error("RATE_LIMIT");
-    // No retry here: a second call would blow the timeout budget and turn a
-    // readable error into an opaque 504.
-    throw err;
+  // Candidate models: the configured one first, then known-good Flash names.
+  const candidates = [MODEL, ...FALLBACK_MODELS.filter((m) => m !== MODEL)];
+  const started = Date.now();
+  let lastErr: any = null;
+
+  for (const model of candidates) {
+    // Respect Netlify's 10s function ceiling across the whole loop.
+    const budget = 8500 - (Date.now() - started);
+    if (budget < 1500) break;
+
+    try {
+      const res = await withTimeout(
+        ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: { responseMimeType: "application/json" },
+        }),
+        budget,
+      );
+      const text = res.text;
+      if (!text) throw new Error("Empty response from model");
+      return sanitize(extractJson(text));
+    } catch (err: any) {
+      const msg = String(err?.message ?? err);
+      lastErr = err;
+
+      if (msg === "SLOW") throw new Error("SLOW");
+      if (/API key|API_KEY|PERMISSION_DENIED/i.test(msg)) throw new Error("BAD_KEY");
+      if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) throw new Error("RATE_LIMIT");
+
+      // Model name rejected (retired / not available to this key) -> try the next one.
+      if (/404|NOT_FOUND|not found|no longer available|is not supported/i.test(msg)) {
+        continue;
+      }
+      throw err;
+    }
   }
+
+  throw lastErr ?? new Error("No usable Gemini model");
 }
 
 /** Map internal errors to something safe and human. Never leak key details. */
