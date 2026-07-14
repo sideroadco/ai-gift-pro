@@ -18,7 +18,7 @@ import type { RecipientInfo, GiftOption, GiftRecommendationResponse } from "../s
  *   Paid only : gemini-3.1-pro-preview
  * Override with the GEMINI_MODEL environment variable.
  */
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
 
 function buildPrompt(info: RecipientInfo): string {
   const today = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -27,7 +27,7 @@ You are an expert personal shopper. Your reputation depends on ACCURACY.
 
 TODAY'S DATE: ${today}
 
-TASK: Recommend 12-15 specific gifts for this person.
+TASK: Recommend exactly 6 specific gifts for this person.
 - Relationship to buyer: ${info.relationship || "unspecified"}
 - Age: ${info.age || "unspecified"}
 - Occasion: ${info.occasion || "unspecified"}
@@ -108,6 +108,15 @@ function sanitize(raw: any): GiftRecommendationResponse {
   return { recommendations, summary: String(raw?.summary ?? "").trim() };
 }
 
+/** Reject before Netlify's function limit so the user gets a readable message
+ *  instead of an opaque 504 gateway timeout. */
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    p,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error("SLOW")), ms)),
+  ]);
+}
+
 export async function generateRecommendations(info: RecipientInfo): Promise<GiftRecommendationResponse> {
   // Read the key across runtimes. On Netlify, prefer the value the user set.
   // (Netlify's AI Gateway can inject its own Gemini vars; we deliberately use
@@ -128,33 +137,30 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
   } as any);
   const prompt = buildPrompt(info);
 
-  // Grounded pass: Google Search is what lets the model find real ASINs.
-  // Note: Gemini does not accept responseSchema/responseMimeType together with
-  // tools, so we ask for raw JSON in the prompt and parse defensively.
+  // No search grounding. It roughly triples the latency and Netlify's function
+  // timeout (10s on the free plan) kills the request before it returns — that was
+  // the HTTP 504. We don't need grounding any more: every link is an Amazon
+  // search link, so the model never has to look up a product code.
   try {
-    const res = await ai.models.generateContent({
-      model: MODEL,
-      contents: prompt,
-      config: { tools: [{ googleSearch: {} }] as any },
-    });
+    const res = await withTimeout(
+      ai.models.generateContent({
+        model: MODEL,
+        contents: prompt,
+        config: { responseMimeType: "application/json" },
+      }),
+      8500, // finish before Netlify's 10s function limit, so we can return a real message
+    );
     const text = res.text;
     if (!text) throw new Error("Empty response from model");
     return sanitize(extractJson(text));
   } catch (err: any) {
     const msg = String(err?.message ?? err);
+    if (msg === "SLOW") throw new Error("SLOW");
     if (/API key|API_KEY|PERMISSION_DENIED|invalid/i.test(msg)) throw new Error("BAD_KEY");
     if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) throw new Error("RATE_LIMIT");
-
-    // Ungrounded fallback: still returns ideas, but every link becomes a search
-    // link because no ASIN was verified. Better than a dead end.
-    const res = await ai.models.generateContent({
-      model: MODEL,
-      contents: prompt,
-      config: { responseMimeType: "application/json" },
-    });
-    const text = res.text;
-    if (!text) throw new Error("Empty response from model");
-    return sanitize(extractJson(text));
+    // No retry here: a second call would blow the timeout budget and turn a
+    // readable error into an opaque 504.
+    throw err;
   }
 }
 
@@ -165,6 +171,8 @@ export function friendlyError(err: unknown): { status: number; message: string }
     return { status: 500, message: "The gift engine isn't configured yet. Set GEMINI_API_KEY on the server." };
   if (code === "BAD_KEY")
     return { status: 500, message: "The gift engine couldn't authenticate. Check the server's GEMINI_API_KEY." };
+  if (code === "SLOW")
+    return { status: 504, message: "That took too long to put together. Please try again — it's usually faster the second time." };
   if (code === "RATE_LIMIT")
     return { status: 429, message: "We've hit today's free-tier limit. Try again in a little while." };
   // Surface the underlying reason (trimmed) so problems are diagnosable in the UI
