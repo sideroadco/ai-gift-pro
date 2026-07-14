@@ -176,10 +176,35 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
       if (/API key|API_KEY|PERMISSION_DENIED/i.test(msg)) throw new Error("BAD_KEY");
       if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) throw new Error("RATE_LIMIT");
 
-      // Model name rejected (retired / not available to this key) -> try the next one.
+      // Model name rejected (retired / unavailable to this key) -> try the next one.
       if (/404|NOT_FOUND|not found|no longer available|is not supported/i.test(msg)) {
         continue;
       }
+
+      // 503 UNAVAILABLE: Google is briefly overloaded. Wait a moment and retry the
+      // same model once; if it's still busy, fall through to the next candidate.
+      if (/503|UNAVAILABLE|high demand|overloaded/i.test(msg)) {
+        const left = 8500 - (Date.now() - started);
+        if (left > 3000) {
+          await new Promise((r) => setTimeout(r, 700));
+          try {
+            const retry = await withTimeout(
+              ai.models.generateContent({
+                model,
+                contents: prompt,
+                config: { responseMimeType: "application/json" },
+              }),
+              8500 - (Date.now() - started),
+            );
+            const t = retry.text;
+            if (t) return sanitize(extractJson(t));
+          } catch {
+            /* still busy — fall through to the next model */
+          }
+        }
+        continue;
+      }
+
       throw err;
     }
   }
@@ -196,6 +221,8 @@ export function friendlyError(err: unknown): { status: number; message: string }
     return { status: 500, message: "The gift engine couldn't authenticate. Check the server's GEMINI_API_KEY." };
   if (code === "SLOW")
     return { status: 504, message: "That took too long to put together. Please try again — it's usually faster the second time." };
+  if (/503|UNAVAILABLE|high demand|overloaded/i.test(code))
+    return { status: 503, message: "Google's AI is busy right now — this is temporary. Please hit Try again in a few seconds." };
   if (code === "RATE_LIMIT")
     return { status: 429, message: "We've hit today's free-tier limit. Try again in a little while." };
   // Surface the underlying reason (trimmed) so problems are diagnosable in the UI
