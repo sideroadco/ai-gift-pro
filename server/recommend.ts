@@ -27,31 +27,63 @@ const FALLBACK_MODELS = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-fl
 
 function buildPrompt(info: RecipientInfo): string {
   const today = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+  const interests = (info.interests || "").trim();
+  const details = [
+    info.relationship && `Relationship to buyer: ${info.relationship}`,
+    info.age && `Age: ${info.age}`,
+    info.occasion && `Occasion: ${info.occasion}`,
+    info.budget && `Budget: ${info.budget}`,
+    info.personality && `Personality: ${info.personality}`,
+    interests && `THEIR INTERESTS / HOBBIES: ${interests}`,
+  ].filter(Boolean).join("\n");
+
   return `
-You are an expert personal shopper. Your reputation depends on ACCURACY.
+You are an expert personal shopper. Your reputation depends on picking gifts that
+OBVIOUSLY match this specific person's interests. Generic bestsellers are failure.
 
 TODAY'S DATE: ${today}
 
-TASK: Recommend exactly 5 real, specific gifts for this person.
+THE PERSON:
+${details}
 
-RULES
-- Real products only (brand + model). No invented items. Skip generic mug/socks defaults.
-- searchQuery: precise "brand + model" so the item is the top Amazon hit.
-- Keep every text field to ONE short sentence. Be concise; do not pad.
+TASK: Recommend exactly 5 real, specific gifts.
+
+THE MOST IMPORTANT RULE:
+Every single gift MUST connect directly to one of their stated interests
+(${interests || "the details above"}). In each "whyItsPerfect" you must name the
+specific interest it ties to. If you cannot tie a gift to an interest, do NOT
+include it — pick a different gift that fits.
+
+BANNED unless it directly matches a stated interest: Hydro Flask, Kindle, Theragun,
+hair tools, smart garden, generic "self-care" gadgets, and other one-size-fits-all
+bestsellers. These are exactly the lazy defaults we exist to avoid.
+
+MORE RULES:
+- Real, currently-purchasable products only (specific brand + model). Never invent one.
+- Spread the 5 gifts across their DIFFERENT interests where possible, and vary price
+  within their budget (a couple of nicer picks, a few smaller ones).
+- searchQuery: precise "brand + model" so the product is the top Amazon result.
+- Keep each text field to ONE concrete sentence.
+
+EXAMPLE of the required specificity:
+If interests are "coffee and cars": a Fellow Stagg pour-over kettle (coffee), a
+Griot's Garage car detailing kit (cars), a CO2-powered tire inflator (cars),
+a burr grinder (coffee) — NOT a Hydro Flask.
 
 OUTPUT
-Return RAW JSON only. No markdown, no code fences, no commentary before or after.
+Return RAW JSON only. No markdown, no code fences, no commentary.
 Shape:
 {
-  "summary": "2-3 sentences explaining the strategy behind this list",
+  "summary": "2-3 sentences naming the interests you built the list around",
   "recommendations": [
     {
       "name": "string",
-      "description": "string, 1-2 sentences, concrete",
+      "description": "one concrete sentence",
       "priceRange": "string",
-      "whyItsPerfect": "string, one sentence tied to THIS person",
-      "searchQuery": "precise Amazon search: brand + model, so the product is the top hit",
-      "category": "short label, e.g. For the reader"
+      "whyItsPerfect": "one sentence that NAMES the interest this ties to",
+      "searchQuery": "brand + model, precise enough to be the top Amazon hit",
+      "category": "short label tied to the interest, e.g. For the coffee ritual"
     }
   ]
 }`.trim();
