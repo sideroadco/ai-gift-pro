@@ -22,8 +22,8 @@ import type { RecipientInfo, GiftOption, GiftRecommendationResponse } from "../s
  * If the alias ever fails we fall back through known-good Flash names in order.
  * Override any of this with the GEMINI_MODEL environment variable.
  */
-const MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
-const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest"];
+const MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
+const FALLBACK_MODELS = ["gemini-flash-lite-latest", "gemini-2.5-flash-lite", "gemini-flash-latest"];
 
 function buildPrompt(info: RecipientInfo): string {
   const today = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -32,27 +32,12 @@ You are an expert personal shopper. Your reputation depends on ACCURACY.
 
 TODAY'S DATE: ${today}
 
-TASK: Recommend exactly 6 specific gifts for this person.
-- Relationship to buyer: ${info.relationship || "unspecified"}
-- Age: ${info.age || "unspecified"}
-- Occasion: ${info.occasion || "unspecified"}
-- Budget: ${info.budget || "unspecified"}
-- Interests / hobbies: ${info.interests || "unspecified"}
-- Personality: ${info.personality || "unspecified"}
+TASK: Recommend exactly 5 real, specific gifts for this person.
 
-STRICT RULES
-1. REAL PRODUCTS ONLY. Every gift must be something a person can buy today.
-   Never invent a product, a brand, or a model number.
-2. BE SPECIFIC. "Ember Mug 2" or "Leuchtturm1917 A5" — not "a nice mug".
-   Skip the obvious mug-and-socks defaults unless the brand makes it interesting.
-3. LINKING. Do NOT provide Amazon product codes (ASINs) — we never use them,
-   because a guessed code sends the buyer to a dead page. Instead, give a
-   "searchQuery" that is precise enough that the product is the top result on
-   Amazon: include the brand and the model/edition, and nothing else.
-   Good: "Fellow Stagg EKG electric kettle"
-   Bad:  "nice kettle for coffee lovers"
-4. PRICE. priceRange is your best estimate (e.g. "$40 - $60"). It is shown to the
-   user as an estimate, not as a live Amazon price.
+RULES
+- Real products only (brand + model). No invented items. Skip generic mug/socks defaults.
+- searchQuery: precise "brand + model" so the item is the top Amazon hit.
+- Keep every text field to ONE short sentence. Be concise; do not pad.
 
 OUTPUT
 Return RAW JSON only. No markdown, no code fences, no commentary before or after.
@@ -157,11 +142,17 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
     if (budget < 1500) break;
 
     try {
-      const res = await withTimeout(
+      const res: any = await withTimeout(
         ai.models.generateContent({
           model,
           contents: prompt,
-          config: { responseMimeType: "application/json" },
+          config: {
+            responseMimeType: "application/json",
+            maxOutputTokens: 2048,
+            // Disable the model's private "thinking" pass — it's the biggest
+            // latency cost and this task doesn't need it.
+            thinkingConfig: { thinkingBudget: 0 } as any,
+          } as any,
         }),
         budget,
       );
@@ -188,11 +179,15 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
         if (left > 3000) {
           await new Promise((r) => setTimeout(r, 700));
           try {
-            const retry = await withTimeout(
+            const retry: any = await withTimeout(
               ai.models.generateContent({
                 model,
                 contents: prompt,
-                config: { responseMimeType: "application/json" },
+                config: {
+                  responseMimeType: "application/json",
+                  maxOutputTokens: 2048,
+                  thinkingConfig: { thinkingBudget: 0 } as any,
+                } as any,
               }),
               8500 - (Date.now() - started),
             );
