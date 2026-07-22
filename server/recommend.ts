@@ -22,8 +22,8 @@ import type { RecipientInfo, GiftOption, GiftRecommendationResponse } from "../s
  * If the alias ever fails we fall back through known-good Flash names in order.
  * Override any of this with the GEMINI_MODEL environment variable.
  */
-const MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
-const FALLBACK_MODELS = ["gemini-flash-lite-latest", "gemini-2.5-flash-lite", "gemini-flash-latest"];
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+const FALLBACK_MODELS = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-flash-latest"];
 
 function buildPrompt(info: RecipientInfo): string {
   const today = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -107,6 +107,14 @@ function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   ]);
 }
 
+/** Per-model generation config. Only Gemini 2.5 models accept thinkingBudget:0;
+ *  3.x models reject it (400 INVALID_ARGUMENT), so we omit it there. */
+function genConfig(model: string) {
+  const cfg: any = { responseMimeType: "application/json", maxOutputTokens: 2048 };
+  if (/2\.5/.test(model)) cfg.thinkingConfig = { thinkingBudget: 0 };
+  return cfg;
+}
+
 export async function generateRecommendations(info: RecipientInfo): Promise<GiftRecommendationResponse> {
   // Read the key across runtimes. On Netlify, prefer the value the user set.
   // (Netlify's AI Gateway can inject its own Gemini vars; we deliberately use
@@ -146,13 +154,7 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
         ai.models.generateContent({
           model,
           contents: prompt,
-          config: {
-            responseMimeType: "application/json",
-            maxOutputTokens: 2048,
-            // Disable the model's private "thinking" pass — it's the biggest
-            // latency cost and this task doesn't need it.
-            thinkingConfig: { thinkingBudget: 0 } as any,
-          } as any,
+          config: genConfig(model),
         }),
         budget,
       );
@@ -171,6 +173,10 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
       if (/404|NOT_FOUND|not found|no longer available|is not supported/i.test(msg)) {
         continue;
       }
+      // Some models reject thinking config (400). Skip to the next candidate.
+      if (/INVALID_ARGUMENT|thinking|does not support/i.test(msg)) {
+        continue;
+      }
 
       // 503 UNAVAILABLE: Google is briefly overloaded. Wait a moment and retry the
       // same model once; if it's still busy, fall through to the next candidate.
@@ -183,11 +189,7 @@ export async function generateRecommendations(info: RecipientInfo): Promise<Gift
               ai.models.generateContent({
                 model,
                 contents: prompt,
-                config: {
-                  responseMimeType: "application/json",
-                  maxOutputTokens: 2048,
-                  thinkingConfig: { thinkingBudget: 0 } as any,
-                } as any,
+                config: genConfig(model),
               }),
               8500 - (Date.now() - started),
             );
