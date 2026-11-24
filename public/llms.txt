@@ -1,0 +1,32 @@
+# Ai Gift Pro
+
+> Ai Gift Pro finds gifts that fit the person. Describe who they are, the occasion and your budget, and it suggests 12 to 15 specific gifts with a reason each fits. The guides cover gift ideas by recipient, interest, occasion and budget for US shoppers.
+
+## Key pages
+
+- [Find a gift](https://aigiftpro.com/): free AI gift finder, about 30 seconds, no account
+- [All guides](https://aigiftpro.com/blog/): gift guides by recipient, interest and occasion
+
+## Guides
+
+- [Anniversary gifts by year: the traditional list, used well](https://aigiftpro.com/blog/anniversary-gifts-by-year/): Anniversary gifts by year, traditional and modern, with real gift ideas for each material and when to ignore the list and do your own thing.
+- [Birthday gifts for your boyfriend](https://aigiftpro.com/blog/birthday-gifts-for-your-boyfriend/): He says he doesn't need anything and means it, mostly. A method for buying for men who genuinely don't ask for things — and why the usual categories fail.
+- [Birthday gifts for your girlfriend](https://aigiftpro.com/blog/birthday-gifts-for-your-girlfriend/): Skip the generic jewellery-and-flowers default. A practical method for choosing a birthday gift that fits how long you've been together and what she actually cares about.
+- [Christmas gifts for Dad that he will actually use](https://aigiftpro.com/blog/christmas-gifts-for-dad/): The best Christmas gifts for dad are things he uses every week. Picks by type of dad, from the griller to the fixer, with budgets and what to skip.
+- [First Christmas in a new relationship](https://aigiftpro.com/blog/first-christmas-new-relationship-gift/): How much to spend, what's too much, and what to buy when you've been together a few months and don't want to get the tone wrong.
+- [What to get someone who says they don’t want anything](https://aigiftpro.com/blog/gift-for-someone-who-says-they-want-nothing/): “I don't need anything” almost never means “don't get me anything.” Here's how to decode it, and the five categories of gift that work when someone refuses to give you a list.
+- [How to buy a gift for someone you barely know](https://aigiftpro.com/blog/gift-for-someone-you-barely-know/): New colleague, partner's parents, Secret Santa stranger. A practical method for buying well with almost no information — and the three categories that are always safe.
+- [Gifts for car enthusiasts](https://aigiftpro.com/blog/gifts-for-car-enthusiasts/): How to buy for someone whose hobby you don't share — what's safe, what's risky, and why detailing supplies are the reliable answer.
+- [Gifts for coffee lovers](https://aigiftpro.com/blog/gifts-for-coffee-lovers/): What to buy depends entirely on how deep they already are. Here's how to tell, and what actually improves the cup at each stage.
+- [Gifts for a dad who buys everything himself](https://aigiftpro.com/blog/gifts-for-dad-who-buys-everything-himself/): If he needs it, he already bought it. Here's how to find the gap — the things he wants but won't justify, the upgrades he never gets round to, and the help he won't ask for.
+- [Gifts for gamers](https://aigiftpro.com/blog/gifts-for-gamers/): Buying games is risky if you don't know what they own. Here's what works regardless of platform — comfort, audio, storage and the accessories nobody buys themselves.
+- [Gifts for a mum who says she needs nothing](https://aigiftpro.com/blog/gifts-for-mum-who-says-she-needs-nothing/): She means it about the money and not about the gesture. How to buy for a parent who deflects, and why time and admin usually beat objects.
+- [Gifts for people who love the outdoors](https://aigiftpro.com/blog/gifts-for-outdoors-lovers/): Outdoor kit is personal and fit-dependent. Here's what's safe to buy without knowing their size, their setup, or how serious they are.
+- [Gifts for people who love to cook](https://aigiftpro.com/blog/gifts-for-people-who-love-cooking/): Serious cooks own the gadgets and don't want more. Here's what they actually run out of, wear out, and can't justify buying themselves.
+- [Gifts for readers (that aren’t books)](https://aigiftpro.com/blog/gifts-for-readers/): Buying a book for a serious reader is risky. Here's what to buy instead — and the one situation where a book is exactly right.
+- [Gifts for someone who has everything](https://aigiftpro.com/blog/gifts-for-someone-who-has-everything/): The “has everything” problem is really a taste problem. Here's how to buy for someone who can afford anything they want — and why novelty gifts are the worst possible answer.
+- [How much should you actually spend on a gift?](https://aigiftpro.com/blog/how-much-to-spend-on-a-gift/): Real spending guidelines by relationship and occasion, why matching someone's spend is a trap, and how to handle a mismatch without anyone feeling awkward.
+- [How to find out what someone wants (without asking)](https://aigiftpro.com/blog/how-to-find-out-what-someone-wants/): Asking directly almost never works. Here are the questions, observations and small research habits that reliably reveal what a person actually wants — months before you need to buy anything.
+- [Last-minute gifts that don’t look last-minute](https://aigiftpro.com/blog/last-minute-gift-ideas/): You have a day, an evening, or an hour. Here's how to buy something genuinely good under time pressure — and the specific tells that give a rushed gift away.
+- [Secret Santa gifts under £25](https://aigiftpro.com/blog/secret-santa-gifts-under-25/): Office Secret Santa has its own rules: it gets opened in public, it has a cap, and you may barely know the person. Here's how to win it without being the joke-gift person.
+- [Why gift guides never work](https://aigiftpro.com/blog/why-gift-guides-dont-work/): Most gift guides are ranked lists of whatever pays best, sorted by category rather than by person. Here's why that structure fails, and a better method for choosing.

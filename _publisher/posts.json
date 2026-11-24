@@ -1,0 +1,25 @@
+{
+  "posts": {
+    "christmas-gifts-for-dad": {
+      "title": "Christmas gifts for Dad that he will actually use",
+      "category": "Holiday gift guides",
+      "published": "2026-11-24T21:44:36",
+      "modified": "2026-11-24T21:44:36",
+      "words": 1578,
+      "primary_keyword": "christmas gifts for dad",
+      "source": "claude-written"
+    },
+    "anniversary-gifts-by-year": {
+      "title": "Anniversary gifts by year: the traditional list, used well",
+      "category": "By occasion & relationship",
+      "published": "2026-07-23T09:00:00",
+      "modified": "2026-11-24T21:45:41",
+      "words": 1496,
+      "primary_keyword": "anniversary gifts by year",
+      "source": "claude-refreshed"
+    }
+  },
+  "legacy_refreshed": [
+    "anniversary-gifts-by-year"
+  ]
+}
