@@ -1,0 +1,69 @@
+{
+  "domain": "https://aigiftpro.com",
+  "site_name": "Ai Gift Pro",
+  "title_suffix": "",
+  "blog_name": "Guides",
+  "blog_dir": "public/blog",
+  "blog_dir_url": "/blog",
+  "url_style": "dir",
+  "public_dirs": [
+    "public",
+    "."
+  ],
+  "app_routes": [
+    "/"
+  ],
+  "locale": "en-US",
+  "logo": "/favicon.png",
+  "share_image": "/favicon.png",
+  "answer_selector": ".answer-box",
+  "faq_heading": "Frequently asked questions",
+  "categories": [
+    "Holiday gift guides",
+    "Problem solving",
+    "By occasion & relationship",
+    "By interest"
+  ],
+  "min_words": 1300,
+  "min_sections": 5,
+  "min_source_links": 2,
+  "similarity_max": 0.08,
+  "affiliate": {
+    "amazon_tag": "gifts0b9-20",
+    "min_amazon_links": 6
+  },
+  "forbidden_strings": [
+    "$249"
+  ],
+  "sitemaps": [
+    "public/sitemap.xml"
+  ],
+  "llms_path": "public/llms.txt",
+  "index": {
+    "path": "public/blog/index.html",
+    "mode": "category-sections"
+  },
+  "llms": {
+    "summary": "Ai Gift Pro finds gifts that fit the person. Describe who they are, the occasion and your budget, and it suggests 12 to 15 specific gifts with a reason each fits. The guides cover gift ideas by recipient, interest, occasion and budget for US shoppers.",
+    "key_pages": [
+      [
+        "Find a gift",
+        "/",
+        "free AI gift finder, about 30 seconds, no account"
+      ],
+      [
+        "All guides",
+        "/blog/",
+        "gift guides by recipient, interest and occasion"
+      ]
+    ]
+  },
+  "snippets": {
+    "toc_wrap": "<nav class=\"toc\" aria-label=\"On this page\"><p class=\"toc-t\">On this page</p><ol>{{ITEMS}}</ol></nav>",
+    "toc_item": "<li><a href=\"#{{ANCHOR}}\">{{TEXT}}</a></li>",
+    "faq_wrap": "<section class=\"faqs\"><h2 id=\"faq\">{{HEADING}}</h2>{{ITEMS}}</section>",
+    "faq_item": "<div class=\"faq-item\"><h3>{{Q}}</h3><div class=\"faq-a\">{{A}}</div></div>",
+    "related_item": "<li><a href=\"{{URL}}\"><span class=\"rk\">{{CATEGORY}}</span>{{TITLE}}</a></li>",
+    "card": "<li class=\"card\"><a href=\"{{URL}}\"><span class=\"rk\">{{CATEGORY}}</span><h3>{{TITLE}}</h3><p>{{EXCERPT}}</p><span class=\"rd\">Read the guide &rarr;</span></a></li>"
+  }
+}

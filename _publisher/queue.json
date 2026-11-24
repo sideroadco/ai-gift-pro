@@ -1,0 +1,205 @@
+{
+  "note": "Holiday topics first through December. A topic is used once its slug exists in public/blog/.",
+  "topics": [
+    {
+      "slug": "christmas-gifts-for-dad",
+      "category": "Holiday gift guides",
+      "note": "Christmas gifts for Dad that he will actually use"
+    },
+    {
+      "slug": "white-elephant-gift-ideas",
+      "category": "Holiday gift guides",
+      "note": "White elephant gift ideas people fight over, by budget"
+    },
+    {
+      "slug": "stocking-stuffers-for-adults",
+      "category": "Holiday gift guides",
+      "note": "Stocking stuffers for adults that are not junk"
+    },
+    {
+      "slug": "christmas-gifts-for-mom",
+      "category": "Holiday gift guides",
+      "note": "Christmas gifts for Mom, by what she is into"
+    },
+    {
+      "slug": "gifts-for-teenage-boys",
+      "category": "By occasion & relationship",
+      "note": "Gifts for teenage boys (13 to 17)"
+    },
+    {
+      "slug": "gifts-for-teenage-girls",
+      "category": "By occasion & relationship",
+      "note": "Gifts for teenage girls (13 to 17)"
+    },
+    {
+      "slug": "gifts-for-coworkers-under-20",
+      "category": "Holiday gift guides",
+      "note": "Gifts for coworkers under $20"
+    },
+    {
+      "slug": "teacher-gifts-for-the-holidays",
+      "category": "Holiday gift guides",
+      "note": "Holiday gifts for teachers that teachers say they want"
+    },
+    {
+      "slug": "gifts-for-grandparents",
+      "category": "By occasion & relationship",
+      "note": "Gifts for grandparents, from practical to sentimental"
+    },
+    {
+      "slug": "hanukkah-gift-ideas",
+      "category": "Holiday gift guides",
+      "note": "Hanukkah gift ideas for all eight nights"
+    },
+    {
+      "slug": "gifts-for-new-parents",
+      "category": "By occasion & relationship",
+      "note": "Gifts for new parents that help in the first months"
+    },
+    {
+      "slug": "gifts-for-runners",
+      "category": "By interest",
+      "note": "Gifts for runners, from beginners to marathoners"
+    },
+    {
+      "slug": "gifts-for-golfers",
+      "category": "By interest",
+      "note": "Gifts for golfers that are not another sleeve of balls"
+    },
+    {
+      "slug": "gifts-for-gardeners",
+      "category": "By interest",
+      "note": "Gifts for gardeners, including winter ones"
+    },
+    {
+      "slug": "gifts-for-dog-owners",
+      "category": "By interest",
+      "note": "Gifts for dog owners (and their dogs)"
+    },
+    {
+      "slug": "gifts-for-cat-lovers",
+      "category": "By interest",
+      "note": "Gifts for cat lovers that are not cat-themed clutter"
+    },
+    {
+      "slug": "gifts-for-bakers",
+      "category": "By interest",
+      "note": "Gifts for bakers, from beginner to serious"
+    },
+    {
+      "slug": "gifts-for-people-who-work-from-home",
+      "category": "By interest",
+      "note": "Gifts for people who work from home"
+    },
+    {
+      "slug": "gifts-for-college-students",
+      "category": "By occasion & relationship",
+      "note": "Gifts for college students that fit a dorm"
+    },
+    {
+      "slug": "gifts-for-your-boss",
+      "category": "By occasion & relationship",
+      "note": "Gifts for your boss without being awkward"
+    },
+    {
+      "slug": "gifts-for-nurses",
+      "category": "By occasion & relationship",
+      "note": "Gifts for nurses that respect long shifts"
+    },
+    {
+      "slug": "gifts-for-travelers",
+      "category": "By interest",
+      "note": "Gifts for frequent travelers"
+    },
+    {
+      "slug": "gifts-for-wine-lovers",
+      "category": "By interest",
+      "note": "Gifts for wine lovers beyond another bottle"
+    },
+    {
+      "slug": "gifts-for-tea-lovers",
+      "category": "By interest",
+      "note": "Gifts for tea lovers"
+    },
+    {
+      "slug": "gifts-for-photographers",
+      "category": "By interest",
+      "note": "Gifts for photographers at every level"
+    },
+    {
+      "slug": "gifts-for-music-lovers",
+      "category": "By interest",
+      "note": "Gifts for music lovers"
+    },
+    {
+      "slug": "gifts-for-woodworkers",
+      "category": "By interest",
+      "note": "Gifts for woodworkers and DIY fans"
+    },
+    {
+      "slug": "gifts-for-fishermen",
+      "category": "By interest",
+      "note": "Gifts for people who fish"
+    },
+    {
+      "slug": "gifts-for-crafters",
+      "category": "By interest",
+      "note": "Gifts for crafters and makers"
+    },
+    {
+      "slug": "gifts-for-new-homeowners",
+      "category": "By occasion & relationship",
+      "note": "Gifts for new homeowners"
+    },
+    {
+      "slug": "gifts-for-in-laws",
+      "category": "By occasion & relationship",
+      "note": "Gifts for in-laws you are still getting to know"
+    },
+    {
+      "slug": "gifts-for-kids-who-have-everything",
+      "category": "Problem solving",
+      "note": "Gifts for kids who already have everything"
+    },
+    {
+      "slug": "experience-gifts",
+      "category": "Problem solving",
+      "note": "Experience gifts that beat another thing"
+    },
+    {
+      "slug": "long-distance-relationship-gifts",
+      "category": "By occasion & relationship",
+      "note": "Gifts for a long-distance partner"
+    },
+    {
+      "slug": "gifts-for-hosts",
+      "category": "By occasion & relationship",
+      "note": "Host and hostess gifts for holiday parties"
+    },
+    {
+      "slug": "gifts-under-50-that-look-expensive",
+      "category": "Problem solving",
+      "note": "Gifts under $50 that look expensive"
+    },
+    {
+      "slug": "gifts-for-gamers-under-50",
+      "category": "By interest",
+      "note": "Gifts for gamers under $50"
+    },
+    {
+      "slug": "valentines-day-gifts-for-him",
+      "category": "By occasion & relationship",
+      "note": "Valentine's Day gifts for him"
+    },
+    {
+      "slug": "valentines-day-gifts-for-her",
+      "category": "By occasion & relationship",
+      "note": "Valentine's Day gifts for her"
+    },
+    {
+      "slug": "thank-you-gifts",
+      "category": "Problem solving",
+      "note": "Thank-you gifts for every situation"
+    }
+  ]
+}
