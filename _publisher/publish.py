@@ -10,6 +10,7 @@ _publisher/site.json and rendered through _publisher/template.html.
     python3 -I _publisher/publish.py replace post.json   # check, then rewrite an existing post in place
     python3 -I _publisher/publish.py status              # posts, legacy posts left to refresh, queue
     python3 -I _publisher/publish.py llms                # rebuild llms.txt
+    python3 -I _publisher/publish.py relink              # refresh related-link titles site-wide
 
 Never edit this file or site.json to get a post through. Fix the post.
 """
@@ -429,6 +430,26 @@ def write_llms():
     return len(lines)
 
 
+
+def relink():
+    """Refresh the text of related-guide links on every post from each target's current H1."""
+    posts = existing_posts()
+    titles = {}
+    for s, p in posts.items():
+        m = re.search(r'<h1[^>]*>(.*?)</h1>', p.read_text(encoding='utf-8', errors='ignore'), re.S)
+        if m:
+            titles[post_url(s).replace(DOMAIN, '')] = m.group(1).strip()
+    changed = 0
+    pat = re.compile(r'(<a href="(/[^"]+)"><span class="rk">[^<]*</span>)([^<]*)(</a>)')
+    for s, p in posts.items():
+        h = p.read_text(encoding='utf-8')
+        new = pat.sub(lambda m: m.group(1) + titles.get(m.group(2), m.group(3)) + m.group(4), h)
+        if new != h:
+            p.write_text(new, encoding='utf-8')
+            changed += 1
+    return changed
+
+
 def run(mode, path):
     post = json.loads(Path(path).read_text(encoding='utf-8'))
     post['faqs'] = [tuple(x) for x in post.get('faqs', [])]
@@ -470,14 +491,17 @@ def run(mode, path):
             reg['legacy_refreshed'].append(post['slug'])
     REGISTRY.write_text(json.dumps(reg, indent=2), encoding='utf-8')
     write_llms()
+    relink()
     print(f"{'REPLACED' if replace else 'PUBLISHED'} {post_url(post['slug'])} ({words} words)")
 
 
 def status():
     reg = load_json(REGISTRY, {'posts': {}})
     posts = existing_posts()
-    legacy = [s for s in sorted(posts) if s not in reg['posts']]
-    q = load_json(PUB / 'queue.json', {'topics': []})['topics']
+    qj = load_json(PUB / 'queue.json', {'topics': []})
+    q = qj['topics']
+    pri = qj.get('refresh_priority', [])
+    legacy = [s for s in sorted(posts, key=lambda s: (pri.index(s) if s in pri else len(pri), s)) if s not in reg['posts']]
     todo = [x for x in q if x['slug'] not in posts]
     print(f'{len(posts)} posts on the site; {len(reg["posts"])} written through the publisher')
     print(f'{len(legacy)} legacy posts not yet refreshed: {", ".join(legacy[:8])}{" ..." if len(legacy) > 8 else ""}')
@@ -494,6 +518,8 @@ if __name__ == '__main__':
         run(cmd, sys.argv[2])
     elif cmd == 'status':
         status()
+    elif cmd == 'relink':
+        print(f'related links refreshed on {relink()} pages')
     elif cmd == 'llms':
         print(f'llms.txt written ({write_llms()} lines)')
     else:

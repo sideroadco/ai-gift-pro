@@ -1,5 +1,5 @@
 {
-  "note": "Holiday topics first through December. A topic is used once its slug exists in public/blog/.",
+  "note": "Holiday topics first through December. A topic is used once its slug exists in public/blog/. refresh_priority sets the order legacy UK guides are converted to US.",
   "topics": [
     {
       "slug": "christmas-gifts-for-dad",
@@ -201,5 +201,22 @@
       "category": "Problem solving",
       "note": "Thank-you gifts for every situation"
     }
+  ],
+  "refresh_priority": [
+    "secret-santa-gifts-under-25",
+    "last-minute-gift-ideas",
+    "first-christmas-new-relationship-gift",
+    "gifts-for-mum-who-says-she-needs-nothing",
+    "gifts-for-dad-who-buys-everything-himself",
+    "gifts-for-someone-who-has-everything",
+    "gift-for-someone-who-says-they-want-nothing",
+    "how-much-to-spend-on-a-gift",
+    "gift-for-someone-you-barely-know",
+    "gifts-for-coffee-lovers",
+    "gifts-for-people-who-love-cooking",
+    "gifts-for-gamers",
+    "gifts-for-readers",
+    "gifts-for-outdoors-lovers",
+    "gifts-for-car-enthusiasts"
   ]
 }
