@@ -17,9 +17,28 @@
       "words": 1496,
       "primary_keyword": "anniversary gifts by year",
       "source": "claude-refreshed"
+    },
+    "white-elephant-gift-ideas": {
+      "title": "White elephant gift ideas people fight over, by budget",
+      "category": "Holiday gift guides",
+      "published": "2026-11-25T13:44:37",
+      "modified": "2026-11-25T13:44:41",
+      "words": 1491,
+      "primary_keyword": "white elephant gift ideas",
+      "source": "claude-written"
+    },
+    "secret-santa-gifts-under-25": {
+      "title": "Secret Santa gifts under $25 that people actually keep",
+      "category": "Holiday gift guides",
+      "published": "2026-07-23T09:00:00",
+      "modified": "2026-11-25T13:45:40",
+      "words": 1390,
+      "primary_keyword": "secret santa gifts under $25",
+      "source": "claude-refreshed"
     }
   },
   "legacy_refreshed": [
-    "anniversary-gifts-by-year"
+    "anniversary-gifts-by-year",
+    "secret-santa-gifts-under-25"
   ]
 }
