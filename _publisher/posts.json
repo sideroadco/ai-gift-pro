@@ -35,10 +35,29 @@
       "words": 1390,
       "primary_keyword": "secret santa gifts under $25",
       "source": "claude-refreshed"
+    },
+    "stocking-stuffers-for-adults": {
+      "title": "Stocking stuffers for adults that are not junk",
+      "category": "Holiday gift guides",
+      "published": "2026-11-25T21:45:32",
+      "modified": "2026-11-25T21:45:32",
+      "words": 1495,
+      "primary_keyword": "stocking stuffers for adults",
+      "source": "claude-written"
+    },
+    "last-minute-gift-ideas": {
+      "title": "Last-minute gifts that don't look last-minute",
+      "category": "Problem solving",
+      "published": "2026-07-23T09:00:00",
+      "modified": "2026-11-25T21:46:41",
+      "words": 1834,
+      "primary_keyword": "last minute gift ideas",
+      "source": "claude-refreshed"
     }
   },
   "legacy_refreshed": [
     "anniversary-gifts-by-year",
-    "secret-santa-gifts-under-25"
+    "secret-santa-gifts-under-25",
+    "last-minute-gift-ideas"
   ]
 }
