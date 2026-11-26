@@ -53,11 +53,30 @@
       "words": 1834,
       "primary_keyword": "last minute gift ideas",
       "source": "claude-refreshed"
+    },
+    "christmas-gifts-for-mom": {
+      "title": "Christmas gifts for Mom, by what she is into",
+      "category": "Holiday gift guides",
+      "published": "2026-11-26T13:44:35",
+      "modified": "2026-11-26T13:44:35",
+      "words": 1724,
+      "primary_keyword": "christmas gifts for mom",
+      "source": "claude-written"
+    },
+    "first-christmas-new-relationship-gift": {
+      "title": "First Christmas gift for a new relationship: what to buy and spend",
+      "category": "By occasion & relationship",
+      "published": "2026-07-23T09:00:00",
+      "modified": "2026-11-26T13:44:35",
+      "words": 1379,
+      "primary_keyword": "first christmas gift",
+      "source": "claude-refreshed"
     }
   },
   "legacy_refreshed": [
     "anniversary-gifts-by-year",
     "secret-santa-gifts-under-25",
-    "last-minute-gift-ideas"
+    "last-minute-gift-ideas",
+    "first-christmas-new-relationship-gift"
   ]
 }
