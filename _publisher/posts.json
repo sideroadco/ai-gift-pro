@@ -107,6 +107,24 @@
       "words": 1736,
       "primary_keyword": "gifts for a dad who buys everything himself",
       "source": "claude-refreshed"
+    },
+    "gifts-for-coworkers-under-20": {
+      "title": "Gifts for coworkers under $20 they will actually use",
+      "category": "Holiday gift guides",
+      "published": "2026-11-27T21:44:21",
+      "modified": "2026-11-27T21:44:21",
+      "words": 1493,
+      "primary_keyword": "gifts for coworkers under $20",
+      "source": "claude-written"
+    },
+    "gifts-for-someone-who-has-everything": {
+      "title": "Gifts for someone who has everything (that they will not already own)",
+      "category": "Problem solving",
+      "published": "2026-07-23T09:00:00",
+      "modified": "2026-11-27T21:45:25",
+      "words": 1637,
+      "primary_keyword": "gifts for someone who has everything",
+      "source": "claude-refreshed"
     }
   },
   "legacy_refreshed": [
@@ -114,6 +132,7 @@
     "secret-santa-gifts-under-25",
     "last-minute-gift-ideas",
     "first-christmas-new-relationship-gift",
-    "gifts-for-dad-who-buys-everything-himself"
+    "gifts-for-dad-who-buys-everything-himself",
+    "gifts-for-someone-who-has-everything"
   ]
 }
