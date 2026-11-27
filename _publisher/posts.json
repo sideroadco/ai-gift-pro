@@ -89,12 +89,31 @@
       "words": 1571,
       "primary_keyword": "gifts for a mom who says she needs nothing",
       "source": "claude-written"
+    },
+    "gifts-for-teenage-girls": {
+      "title": "Gifts for teenage girls (13 to 17) that fit her real life",
+      "category": "By occasion & relationship",
+      "published": "2026-11-27T13:46:27",
+      "modified": "2026-11-27T13:46:27",
+      "words": 1568,
+      "primary_keyword": "gifts for teenage girls",
+      "source": "claude-written"
+    },
+    "gifts-for-dad-who-buys-everything-himself": {
+      "title": "Gifts for a dad who buys everything himself",
+      "category": "By occasion & relationship",
+      "published": "2026-07-23T09:00:00",
+      "modified": "2026-11-27T13:46:32",
+      "words": 1736,
+      "primary_keyword": "gifts for a dad who buys everything himself",
+      "source": "claude-refreshed"
     }
   },
   "legacy_refreshed": [
     "anniversary-gifts-by-year",
     "secret-santa-gifts-under-25",
     "last-minute-gift-ideas",
-    "first-christmas-new-relationship-gift"
+    "first-christmas-new-relationship-gift",
+    "gifts-for-dad-who-buys-everything-himself"
   ]
 }
