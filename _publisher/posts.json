@@ -125,6 +125,24 @@
       "words": 1637,
       "primary_keyword": "gifts for someone who has everything",
       "source": "claude-refreshed"
+    },
+    "teacher-gifts-for-the-holidays": {
+      "title": "Holiday gifts for teachers that teachers say they want",
+      "category": "Holiday gift guides",
+      "published": "2026-11-28T13:45:45",
+      "modified": "2026-11-28T13:45:45",
+      "words": 1534,
+      "primary_keyword": "holiday gifts for teachers",
+      "source": "claude-written"
+    },
+    "gift-for-someone-who-says-they-want-nothing": {
+      "title": "What to get someone who says they don't want anything",
+      "category": "Problem solving",
+      "published": "2026-07-23T09:00:00",
+      "modified": "2026-11-28T13:45:45",
+      "words": 1785,
+      "primary_keyword": "what to get someone who says they don't want anything",
+      "source": "claude-refreshed"
     }
   },
   "legacy_refreshed": [
@@ -133,6 +151,7 @@
     "last-minute-gift-ideas",
     "first-christmas-new-relationship-gift",
     "gifts-for-dad-who-buys-everything-himself",
-    "gifts-for-someone-who-has-everything"
+    "gifts-for-someone-who-has-everything",
+    "gift-for-someone-who-says-they-want-nothing"
   ]
 }
